@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
 public class JpaMain {
 
@@ -19,26 +18,45 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 등록
-//            Member member = new Member();
-//            member.setId(2L);
-//            member.setName("HelloB");
 
-//            em.persist(member);
+            // // JPQL - 객체 지향 쿼리
+            // List<Member> result = em.createQuery("select m from Member as m", Member.class)
+            //         .setFirstResult(0)  // 페이징
+            //         .setMaxResults(10)  // 페이징
+            //         .getResultList();
+            //
+            // for (Member member: result) {
+            //     System.out.println(member.getName());
+            // }
 
-            // 조회 및 수정
-//            Member findMember = em.find(Member.class, 1L);
-//            findMember.setName("HelloJPA");
+            // 비영속
+            // Member member = new Member();
+            // member.setId(101L);
+            // member.setName("HelloJPA");
 
-            // JPQL - 객체 지향 쿼리
-            List<Member> result = em.createQuery("select m from Member as m", Member.class)
-                    .setFirstResult(0)  // 페이징
-                    .setMaxResults(10)  // 페이징
-                    .getResultList();
+            // 영속
+            // System.out.println(" === BEFORE ===");
+            // em.persist(member);
+            // System.out.println(" === AFTER ===");
 
-            for (Member member: result) {
-                System.out.println(member.getName());
-            }
+            // Member findMember1 = em.find(Member.class, 101L);   // DB에서 조회 후 영속성 컨텍스트 1차 캐시에 등록
+            // Member findMember2 = em.find(Member.class, 101L);   // 1차 캐시에서 조회
+            //
+            // System.out.println("result = " + (findMember1 == findMember2)); // 마치 컬렉션에서 뽑아쓰듯 == 비교가 가능해짐
+
+            // Member member = em.find(Member.class, 150L);
+            // member.setName("ZZZZZ");
+            //
+            // Member member1 = em.find(Member.class, 150L);
+            // System.out.println("member1 = " + member1.getName());
+
+            // flush Test
+            Member member = new Member(200L, "member200");
+            em.persist(member);
+
+            em.flush();
+
+            System.out.println("=======");
 
             tx.commit();
         } catch (Exception e) {
