@@ -18,6 +18,22 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Member memberA = new Member();
+            memberA.setUsername("A");
+
+            Member memberB = new Member();
+            memberB.setUsername("B");
+
+            Member memberC = new Member();
+            memberC.setUsername("C");
+
+            em.persist(memberA);
+            em.persist(memberB);
+            em.persist(memberC);
+
+            System.out.println("memberA.id = " + memberA.getId());
+            System.out.println("memberB.id = " + memberB.getId());
+            System.out.println("memberC.id = " + memberC.getId());
 
             tx.commit();
         } catch (Exception e) {
