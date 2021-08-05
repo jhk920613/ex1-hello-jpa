@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
 
@@ -25,15 +26,21 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("member1");
             // member.setTeamId(team.getId());
-            member.setTeam(team);
+            member.changeTeam(team);
             em.persist(member);
 
-            em.flush();
-            em.clear();
+            // 1차 캐시에 저장된 상태로 영속성 컨텍스트에 들어가있다면 메모리에서 가져오므로 아래 작업을 안할 경우 출력되는게 없음
+            // team.getMembers().add(member);   // Team 클래스에 연관관계 편의 메소드를 생성해 주석 처리
+
+            // em.flush();
+            // em.clear();
 
             Member findMember = em.find(Member.class, member.getId());
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam = " + findTeam.getName());
+            List<Member> members = findMember.getTeam().getMembers();
+
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());
+            }
 
             tx.commit();
         } catch (Exception e) {

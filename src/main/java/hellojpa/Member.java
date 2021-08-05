@@ -57,7 +57,10 @@ public class Member {
         return team;
     }
 
-    public void setTeam(Team team) {
+    // Tip) 로직이 들어가는 경우 단순 세터의 setTeam 이 아닌 changeTeam 으로 사용해 중요한 역할을 하는구나를 인지할 수 있도록 하자.
+    public void changeTeam(Team team) {
         this.team = team;
+        // 연관관계 편의 메소드 사용
+        this.team.getMembers().add(this);
     }
 }
