@@ -19,28 +19,16 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
-
             Member member = new Member();
             member.setUsername("member1");
-            // member.setTeamId(team.getId());
-            member.changeTeam(team);
+
             em.persist(member);
 
-            // 1차 캐시에 저장된 상태로 영속성 컨텍스트에 들어가있다면 메모리에서 가져오므로 아래 작업을 안할 경우 출력되는게 없음
-            // team.getMembers().add(member);   // Team 클래스에 연관관계 편의 메소드를 생성해 주석 처리
+            Team team = new Team();
+            team.setName("teamA");
+            team.getMembers().add(member);
 
-            // em.flush();
-            // em.clear();
-
-            Member findMember = em.find(Member.class, member.getId());
-            List<Member> members = findMember.getTeam().getMembers();
-
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
-            }
+            em.persist(team);
 
             tx.commit();
         } catch (Exception e) {
