@@ -2,6 +2,7 @@ package hellojpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ public class Member extends BaseEntity {
 
     // @Column(name = "TEAM_ID")
     // private Long teamId;
-    @ManyToOne // Member 입장에서 생각
+    @ManyToOne(fetch = FetchType.EAGER) // Member 입장에서 생각
     @JoinColumn(name = "TEAM_ID")
     private Team team;
     // 양방향일 경우 아래처럼 작성
@@ -63,14 +64,14 @@ public class Member extends BaseEntity {
         this.username = username;
     }
 
-    // public Team getTeam() {
-    //     return team;
-    // }
-    //
-    // // Tip) 로직이 들어가는 경우 단순 세터의 setTeam 이 아닌 changeTeam 으로 사용해 중요한 역할을 하는구나를 인지할 수 있도록 하자.
-    // public void changeTeam(Team team) {
-    //     this.team = team;
-    //     // 연관관계 편의 메소드 사용
-    //     this.team.getMembers().add(this);
-    // }
+    public Team getTeam() {
+        return team;
+    }
+
+    // Tip) 로직이 들어가는 경우 단순 세터의 setTeam 이 아닌 changeTeam 으로 사용해 중요한 역할을 하는구나를 인지할 수 있도록 하자.
+    public void changeTeam(Team team) {
+        this.team = team;
+        // 연관관계 편의 메소드 사용
+        this.team.getMembers().add(this);
+    }
 }

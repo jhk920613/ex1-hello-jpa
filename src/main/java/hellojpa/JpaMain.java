@@ -20,12 +20,25 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("user1");
-            member.setCreatedBy("kim");
-            member.setCreatedDate(LocalDateTime.now());
+            // Proxy 조회
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
+            Member member = new Member();
+            member.setUsername("hello");
+            member.changeTeam(team);
+            
             em.persist(member);
+            
+            em.flush();
+            em.clear();
+            
+            Member findMember = em.find(Member.class, member.getId());
+            System.out.println("findMember.getClass() = " + findMember.getTeam().getClass());
+
+            System.out.println("======");
+            System.out.println("findMember = " + findMember.getTeam().getName());
 
             tx.commit();
         } catch (Exception e) {
